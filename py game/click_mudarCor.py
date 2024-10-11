@@ -2,25 +2,36 @@
 
 # Example file showing a basic pygame "game loop"
 #Titulo: Click na tela e veja a mensagem e mude de cor do setup
-import pygame
+#Título: Nomear a janela
 
-# pygame setup
-pygame.init()
-screen = pygame.display.set_mode((500, 500))
-clock = pygame.time.Clock()
-running = True
+#Lição de Casa: COMENTA TODAS AS LINHAS COM AS FUNÇÕES DESSE CÓDIGO!
+
+
+
+
+# Example file showing a basic pygame "game loop"
+#Titulo: Click na tela e veja a mensagem e mude de cor do setup
+import pygame #importa a biblioteca pygame para o script
+
+# pygame configuração
+pygame.init() #inicialização do pacote pygame
+screen = pygame.display.set_mode((500, 500)) #configura o tamanho da tela
+clock = pygame.time.Clock() #biblioteca tempo
+running = True #variável de controle de status do jogo
 cor_fundo = 1 #azul
 
-
+# Altera o título da janela
+pygame.display.set_caption("Jogo da Velha")
 
 while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
+    #controle de enventos do jogo
+    #pygame.QUIT significa quando o usuário clicar em X a tela fechará
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
         # Lógica
+        # MOUSEBUTTONDOWN significa evento do click do mouse
         if event.type == pygame.MOUSEBUTTONDOWN: #mousebuttondown = click do mouse
             print("Clicou!")
             cor_fundo = cor_fundo + 1 #contador
@@ -39,8 +50,9 @@ while running:
 
 
     # flip() the display to put your work on screen
+    # display para atualizar a página
     pygame.display.flip()
 
-    clock.tick(60)  # limits FPS to 60 / 60 fps por segundos. quanto mais fps por segundo, mas fluído fica a imagem; quanto menos, menor a qualidade
+    clock.tick(60)  # limita FPS para 60 / 60 fps por segundos. quanto mais fps por segundo, mas fluído fica a imagem; quanto menos, menor a qualidade
 
 pygame.quit()
