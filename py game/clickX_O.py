@@ -11,7 +11,7 @@ pygame.display.set_caption("Jogo da Velha") # Altera o título da janela
 clock = pygame.time.Clock() #biblioteca tempo
 running = True #variável de controle de status do jogo
 cor_fundo = 1 #azul / contador
-apresenta_personagem = 0
+rodadas = 0
 x = 0
 y = 0
 
@@ -26,7 +26,12 @@ fonte_quadrinhos = pygame.font.SysFont("Comic Sans MS", 80) #importando a fonte 
 
 # Render = tranforma texto em imagem
 personagem_x = fonte_quadrinhos.render("X", True, "Blue") #Renderiza o "X" e o deixa rosa
-personagem_y = fonte_quadrinhos.render("O", True, "Purple") #Renderiza o "O" e o deixa amarela
+personagem_o = fonte_quadrinhos.render("O", True, "Purple") #Renderiza o "O" e o deixa amarela
+
+#variável do personagem atual
+personagem_atual = personagem_o
+
+
 
 #Loop do jogo
 while running: # Enquanto a variável "running" for verdadeira, o jogo continua
@@ -48,18 +53,27 @@ while running: # Enquanto a variável "running" for verdadeira, o jogo continua
             x = click_pos[0]
             y = click_pos[1]
             
-            apresenta_personagem = apresenta_personagem + 1 #contador
-            print(apresenta_personagem)
+            rodadas = rodadas + 1 #contador
+            print(rodadas)
 
-            # if(apresenta_personagem > 11): #se o contador for maior que 10
-            #     apresenta_personagem = 0 # o contador volta a ser 1
+            # if(rodadas > 11): #se o contador for maior que 10
+            #     rodadas = 0 # o contador volta a ser 1
             
             #letra = "X" #quando o mouse é clicado o X aparece / define a variável como X
             # x,y = pygame.mouse.get_pos()
 
+            
+
+            # Altera o persnagem de X para O
+            if personagem_atual == personagem_o:
+                personagem_atual = personagem_x
+
+            else:
+                personagem_atual = personagem_o
 
 
-    
+
+     
 
 
         # Desenho do tabuleiro
@@ -71,8 +85,8 @@ while running: # Enquanto a variável "running" for verdadeira, o jogo continua
         pygame.draw.line(screen, "white",(0, 400), (600, 400), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
 
 
-        if apresenta_personagem >= 10:
-            apresenta_personagem = 0
+        if rodadas >= 10:
+            rodadas = 0
             screen.fill("Black")
 
             # Redesenha o tabuleiro
@@ -90,31 +104,31 @@ while running: # Enquanto a variável "running" for verdadeira, o jogo continua
         #         Jogadores:      Eixo  x , y
 
         if x > 0 and x < 200 and y < 200: # Primeiro
-            screen.blit(personagem_x, (70, 40)) # 1/1
+            screen.blit(personagem_atual, (70, 40)) # 1/1
 
         elif x >= 200 and x < 400 and y < 200: # Segundo
-            screen.blit(personagem_y, (270, 40)) # 2/1
+            screen.blit(personagem_atual, (270, 40)) # 2/1
 
         elif x >= 400 and y < 200: # Terceiro
-            screen.blit(personagem_x, (470, 40)) # 3/1
+            screen.blit(personagem_atual, (470, 40)) # 3/1
 
         elif x < 200 and y >= 200 and y < 400: # Quarto
-            screen.blit(personagem_y, (70, 240)) # 1/2
+            screen.blit(personagem_atual, (70, 240)) # 1/2
             
         elif x >= 200 and x < 400 and y >= 200 and y < 400: # Quinto
-            screen.blit(personagem_x, (270, 240)) # 2/2
+            screen.blit(personagem_atual, (270, 240)) # 2/2
 
         elif x >= 400 and y >= 200 and y < 400: # Sexto
-            screen.blit(personagem_y, (470, 240)) # 3/2
+            screen.blit(personagem_atual, (470, 240)) # 3/2
 
         elif x < 200 and y >= 400: # Sétimo
-            screen.blit(personagem_x, (70, 440)) # 1/3
+            screen.blit(personagem_atual, (70, 440)) # 1/3
 
         elif x >= 200 and x < 400 and y >= 400: # Oitavo
-            screen.blit(personagem_y, (270, 440)) # 2/3
+            screen.blit(personagem_atual, (270, 440)) # 2/3
 
         elif x >= 400 and y >= 400: # Nono
-            screen.blit(personagem_x, (470, 440)) # 3/3
+            screen.blit(personagem_atual, (470, 440)) # 3/3
             screen.blit(mensagem1, (100, 50)) # 3/3
             screen.blit(mensagem2, (100, 250)) # 3/3
 
@@ -129,7 +143,7 @@ while running: # Enquanto a variável "running" for verdadeira, o jogo continua
 
     #elif cor_fundo == 2: # se o contador for = 2
         # screen.fill("red") # a tela fica vermelha
-       # screen.blit(personagem_y,(250, 250)) # posiciona o O na tela
+       # screen.blit(personagem_o,(250, 250)) # posiciona o O na tela
 
     
     # display para atualizar a página
