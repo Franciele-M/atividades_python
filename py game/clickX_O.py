@@ -65,6 +65,8 @@ while running: # Enquanto a variável "running" for verdadeira, o jogo continua
             
 
             # Altera o persnagem de X para O
+
+            
             if personagem_atual == personagem_o:
                 personagem_atual = personagem_x
 
