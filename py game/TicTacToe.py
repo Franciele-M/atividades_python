@@ -1,84 +1,179 @@
-import pygame  # Importa a biblioteca pygame para o script
+#Título: Jogo da Velha - Lógica em sala de aula
+
+
+import pygame #importa a biblioteca pygame para o script
 
 # pygame configuração
-pygame.init()  # Inicialização do pacote pygame
-pygame.font.init()  # Inicialização da fonte no pygame (init = início)
-screen = pygame.display.set_mode((600, 600))  # Configura o tamanho da tela
-pygame.display.set_caption("Jogo da Velha")  # Altera o título da janela
-clock = pygame.time.Clock()  # Biblioteca tempo
-running = True  # Variável de controle de status do jogo
-cor_fundo = 1  # Azul / contador
+pygame.init() #inicialização do pacote pygame
+pygame.font.init()  #inicalização da fonte no pygame (init = inicio)
+screen = pygame.display.set_mode((600, 600)) #configura o tamanho da tela
+pygame.display.set_caption("Jogo da Velha") # Altera o título da janela
+clock = pygame.time.Clock() #biblioteca tempo
+running = True #variável de controle de status do jogo
+cor_fundo = 1 #azul / contador
+rodadas = 0
+tabuleiro_desenhado = False
+x = 0
+y = 0
 
-# Fonte e renderização de "X" e "O"
-fonte_quadrinhos = pygame.font.SysFont("Comic Sans MS", 70)  # Importando a fonte e definindo o tamanho dela
-personagem_x = fonte_quadrinhos.render("X", True, "Blue")  # Renderiza o "X" e o deixa azul
-personagem_y = fonte_quadrinhos.render("O", True, "Purple")  # Renderiza o "O" e o deixa roxo
+fonte_mensagem = pygame.font.SysFont("Comic Sans MS", 150)
 
-# Variáveis para o jogo da velha
-tabuleiro = ["", "", "", "", "", "", "", "", ""]  # Lista para armazenar as jogadas
-jogador_atual = "X"  # Define o jogador atual como "X"
-jogadas = 0  # Contador de jogadas
+mensagem1 = fonte_mensagem.render("Game ", True, "Yellow")
+mensagem2 = fonte_mensagem.render("Over! ", True, "Yellow")
 
-# Função para desenhar o tabuleiro
-def desenha_tabuleiro():
-    pygame.draw.line(screen, "white", (200, 0), (200, 600), 10)  # Linha vertical à esquerda
-    pygame.draw.line(screen, "white", (400, 0), (400, 600), 10)  # Linha vertical à direita
-    pygame.draw.line(screen, "white", (0, 200), (600, 200), 10)  # Linha horizontal superior
-    pygame.draw.line(screen, "white", (0, 400), (600, 400), 10)  # Linha horizontal inferior
 
-# Função para posicionar X e O no tabuleiro
-def desenha_jogadas():
-    for i in range(9):  # Percorre as 9 posições do tabuleiro
-        x_pos = (i % 3) * 200 + 60  # Calcula a posição X de cada quadrado
-        y_pos = (i // 3) * 200 + 30  # Calcula a posição Y de cada quadrado
-        if tabuleiro[i] == "X":
-            screen.blit(personagem_x, (x_pos, y_pos))  # Desenha o "X"
-        elif tabuleiro[i] == "O":
-            screen.blit(personagem_y, (x_pos, y_pos))  # Desenha o "O"
 
-# Função para verificar se o jogo acabou
-def verifica_fim_de_jogo():
-    global running
-    if jogadas == 9:  # Se as 9 jogadas forem realizadas, o jogo termina
-        print("Game Over")  # Exibe "Game Over" no terminal
-        running = False  # Para o jogo
+fonte_quadrinhos = pygame.font.SysFont("Comic Sans MS", 80) #importando a fonte o definindo o tamanho dela
 
-# Loop do jogo
-while running:  # Enquanto a variável "running" for verdadeira, o jogo continua
+# Render = tranforma texto em imagem
+personagem_x = fonte_quadrinhos.render("X", True, "Blue") #Renderiza o "X" e o deixa rosa
+personagem_o = fonte_quadrinhos.render("O", True, "Purple") #Renderiza o "O" e o deixa amarela
 
-    screen.fill("black")  # Preenche o fundo da tela com preto
-    desenha_tabuleiro()  # Desenha o tabuleiro na tela
-    desenha_jogadas()  # Desenha X e O no tabuleiro
+#variável do personagem atual
+personagem_atual = personagem_o
 
-    # Controle de eventos do jogo
-    for event in pygame.event.get():  # Verifica todos os eventos (tipo, click do mouse)
-        if event.type == pygame.QUIT:  # Se clicar no X da janela (sair)
-            running = False  # Para o loop (fecha a janela)
+
+ # função ...        (aqui é a variável)
+def desenha_tabuleiro(espessura, cor):
+    # valor 7 = espesu
+     # Desenho do tabuleiro
+        #                                  Origem    Destino
+        #                                 ( x, y ) ( x ,  y )
+        pygame.draw.line(screen, cor,(200, 0), (200, 600), espessura) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+        pygame.draw.line(screen, cor,(400, 0), (400, 600), espessura) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+       
+       #                                  3º  1º  ,  4º  , 2º   quadrante
+        pygame.draw.line(screen, cor,(0, 200), (600, 200), espessura) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+        pygame.draw.line(screen, cor,(0, 400), (600, 400), espessura) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+
+
+
+def faz_jogada():
+     #         Jogadores:      Eixo  x , y
+
+        if x > 0 and x < 200 and y < 200: # Primeiro
+            screen.blit(personagem_atual, (70, 40)) # 1/1
+
+        elif x >= 200 and x < 400 and y < 200: # Segundo
+            screen.blit(personagem_atual, (270, 40)) # 2/1
+
+        elif x >= 400 and y < 200: # Terceiro
+            screen.blit(personagem_atual, (470, 40)) # 3/1
+
+        elif x < 200 and y >= 200 and y < 400: # Quarto
+            screen.blit(personagem_atual, (70, 240)) # 1/2
+            
+        elif x >= 200 and x < 400 and y >= 200 and y < 400: # Quinto
+            screen.blit(personagem_atual, (270, 240)) # 2/2
+
+        elif x >= 400 and y >= 200 and y < 400: # Sexto
+            screen.blit(personagem_atual, (470, 240)) # 3/2
+
+        elif x < 200 and y >= 400: # Sétimo
+            screen.blit(personagem_atual, (70, 440)) # 1/3
+
+        elif x >= 200 and x < 400 and y >= 400: # Oitavo
+            screen.blit(personagem_atual, (270, 440)) # 2/3
+
+        elif x >= 400 and y >= 400: # Nono
+            screen.blit(personagem_atual, (470, 440)) # 3/3
+            #screen.blit(mensagem1, (100, 50)) # 3/3
+            #screen.blit(mensagem2, (100, 250)) # 3/3
+
+
+
+
+#Loop do jogo
+while running: # Enquanto a variável "running" for verdadeira, o jogo continua
+
+    #controle de enventos do jogo
+    #pygame.QUIT significa quando o usuário clicar em X a tela fechará
+    for event in pygame.event.get(): #verifica todos os eventos (tipo, click do mouse)
+        if event.type == pygame.QUIT: #se clicar no X da janela (sair)
+            running = False # Para o loop (fecha a janela)
 
         # Lógica para click
-        if event.type == pygame.MOUSEBUTTONDOWN:  # Se o mouse for clicado
-            print("Clicou!")  # Aparecerá "clicou!" no terminal
-            x, y = pygame.mouse.get_pos()  # Captura a posição do clique
-            posicao = (x // 200) + (y // 200) * 3  # Calcula a célula clicada (0 a 8)
+        # MOUSEBUTTONDOWN significa evento do click do mouse
+        if event.type == pygame.MOUSEBUTTONDOWN: # Se o mouse for clicado
+            #print("Clicou!") # Aparecerá "clicou!" no terminal
+            click_pos = pygame.mouse.get_pos() # traz a posição do mouse no evento click
 
-            # Se a célula clicada estiver vazia
-            if tabuleiro[posicao] == "":
-                tabuleiro[posicao] = jogador_atual  # Marca o "X" ou "O" no tabuleiro
-                jogadas += 1  # Aumenta o contador de jogadas
+            print("Eixo X: ", click_pos[0])
+            print("Eixo Y: ", click_pos[1])
+            x = click_pos[0]
+            y = click_pos[1]
+            
+            rodadas = rodadas + 1 #contador
+            print(rodadas)
 
-                # Alterna entre X e O
-                if jogador_atual == "X":
-                    jogador_atual = "O"  # Troca para o jogador O
-                else:
-                    jogador_atual = "X"  # Troca para o jogador X
+            # if(rodadas > 11): #se o contador for maior que 10
+            #     rodadas = 0 # o contador volta a ser 1
+            
+            #letra = "X" #quando o mouse é clicado o X aparece / define a variável como X
+            # x,y = pygame.mouse.get_pos()
 
-                verifica_fim_de_jogo()  # Verifica se o jogo terminou
+            
 
-    # Atualiza a tela com as mudanças
+            # Altera o persnagem de X para O
+            if personagem_atual == personagem_o:
+                personagem_atual = personagem_x
+
+            else:
+                personagem_atual = personagem_o
+
+
+            faz_jogada() # ACRESCENTAR 
+
+
+        if tabuleiro_desenhado == False:
+            #Função que desenha tabuleiro (espessura, cor) (aqui é o valor da variável: tamanho, cor, etc.)
+            desenha_tabuleiro(10, "green")
+            tabuleiro_desenhado = True #DESCOMENTA DEPOIS
+
+        
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+       
+        if rodadas >= 10:
+            screen.fill("Black")
+            rodadas = 0
+            x = 0
+            y = 0
+            tabuleiro_desenhado = False #DESCOMENTA DEPOIS
+
+
+
+            # Redesenha o tabuleiro
+        #     pygame.draw.line(screen, "white",(200, 0), (200, 600), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+        #     pygame.draw.line(screen, "white",(400, 0), (400, 600), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+        
+        # #                                  3º  1º  ,  4º  , 2º   quadrante
+        #     pygame.draw.line(screen, "white",(0, 200), (600, 200), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+        #     pygame.draw.line(screen, "white",(0, 400), (600, 400), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+
+
+#---------------GAME OVER!!!------------------------------------------
+
+       if 
+
+       
+            
+
+        
+
+    # muda a cor e mostra as letras
+    #if cor_fundo == 1: # se o contador for = 1
+      #  screen.blit(personagem_x,(20, 20)) # posiciona o X na tela
+
+    #elif cor_fundo == 2: # se o contador for = 2
+        # screen.fill("red") # a tela fica vermelha
+       # screen.blit(personagem_o,(250, 250)) # posiciona o O na tela
+
+    
+    # display para atualizar a página
     pygame.display.flip()
 
-    # Limita os frames por segundo
-    clock.tick(60)  # Limita FPS para 60
+    clock.tick(60)  # limita FPS para 60 / 60 fps por segundos. quanto mais fps por segundo, mas fluído fica a imagem; quanto menos, menor a qualidade
 
-# Finaliza o pygame e o jogo
-pygame.quit()
+pygame.quit() # Fecha o pygame e finaliza o jogo
