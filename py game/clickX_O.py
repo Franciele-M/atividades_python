@@ -31,6 +31,56 @@ personagem_o = fonte_quadrinhos.render("O", True, "Purple") #Renderiza o "O" e o
 #variável do personagem atual
 personagem_atual = personagem_o
 
+ 
+def desenha_tabuleiro(espessura, cor):
+    # valor 7 = espesu
+     # Desenho do tabuleiro
+        #                                  Origem    Destino
+        #                                 ( x, y ) ( x ,  y )
+        pygame.draw.line(screen, cor,(200, 0), (200, 600), espessura) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+        pygame.draw.line(screen, cor,(400, 0), (400, 600), espessura) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+       
+       #                                  3º  1º  ,  4º  , 2º   quadrante
+        pygame.draw.line(screen, cor,(0, 200), (600, 200), espessura) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+        pygame.draw.line(screen, cor,(0, 400), (600, 400), espessura) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+
+
+
+def faz_jogada():
+     #         Jogadores:      Eixo  x , y
+
+        if x > 0 and x < 200 and y < 200: # Primeiro
+            screen.blit(personagem_atual, (70, 40)) # 1/1
+
+        elif x >= 200 and x < 400 and y < 200: # Segundo
+            screen.blit(personagem_atual, (270, 40)) # 2/1
+
+        elif x >= 400 and y < 200: # Terceiro
+            screen.blit(personagem_atual, (470, 40)) # 3/1
+
+        elif x < 200 and y >= 200 and y < 400: # Quarto
+            screen.blit(personagem_atual, (70, 240)) # 1/2
+            
+        elif x >= 200 and x < 400 and y >= 200 and y < 400: # Quinto
+            screen.blit(personagem_atual, (270, 240)) # 2/2
+
+        elif x >= 400 and y >= 200 and y < 400: # Sexto
+            screen.blit(personagem_atual, (470, 240)) # 3/2
+
+        elif x < 200 and y >= 400: # Sétimo
+            screen.blit(personagem_atual, (70, 440)) # 1/3
+
+        elif x >= 200 and x < 400 and y >= 400: # Oitavo
+            screen.blit(personagem_atual, (270, 440)) # 2/3
+
+        elif x >= 400 and y >= 400: # Nono
+            screen.blit(personagem_atual, (470, 440)) # 3/3
+            #screen.blit(mensagem1, (100, 50)) # 3/3
+            #screen.blit(mensagem2, (100, 250)) # 3/3
+
+
+
+
 
 
 #Loop do jogo
@@ -65,8 +115,6 @@ while running: # Enquanto a variável "running" for verdadeira, o jogo continua
             
 
             # Altera o persnagem de X para O
-
-            
             if personagem_atual == personagem_o:
                 personagem_atual = personagem_x
 
@@ -75,66 +123,33 @@ while running: # Enquanto a variável "running" for verdadeira, o jogo continua
 
 
 
-     
+        #Função que desenha tabuleiro (espessura, cor) (aqui é o valor da variável: tamanho, cor, etc.)
+        desenha_tabuleiro(10, "green")
+        
+        faz_jogada()
 
 
-        # Desenho do tabuleiro
-        pygame.draw.line(screen, "white",(200, 0), (200, 600), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
-        pygame.draw.line(screen, "white",(400, 0), (400, 600), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+
        
-       #                                  3º  1º  ,  4º  , 2º   quadrante
-        pygame.draw.line(screen, "white",(0, 200), (600, 200), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
-        pygame.draw.line(screen, "white",(0, 400), (600, 400), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
-
-
         if rodadas >= 10:
-            rodadas = 0
             screen.fill("Black")
+            rodadas = 0
+            x = 0
+            y = 0
 
             # Redesenha o tabuleiro
-            pygame.draw.line(screen, "white",(200, 0), (200, 600), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
-            pygame.draw.line(screen, "white",(400, 0), (400, 600), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+        #     pygame.draw.line(screen, "white",(200, 0), (200, 600), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+        #     pygame.draw.line(screen, "white",(400, 0), (400, 600), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
         
-        #                                  3º  1º  ,  4º  , 2º   quadrante
-            pygame.draw.line(screen, "white",(0, 200), (600, 200), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
-            pygame.draw.line(screen, "white",(0, 400), (600, 400), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+        # #                                  3º  1º  ,  4º  , 2º   quadrante
+        #     pygame.draw.line(screen, "white",(0, 200), (600, 200), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
+        #     pygame.draw.line(screen, "white",(0, 400), (600, 400), 7) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
 
 
 
+       
 
-
-        #         Jogadores:      Eixo  x , y
-
-        if x > 0 and x < 200 and y < 200: # Primeiro
-            screen.blit(personagem_atual, (70, 40)) # 1/1
-
-        elif x >= 200 and x < 400 and y < 200: # Segundo
-            screen.blit(personagem_atual, (270, 40)) # 2/1
-
-        elif x >= 400 and y < 200: # Terceiro
-            screen.blit(personagem_atual, (470, 40)) # 3/1
-
-        elif x < 200 and y >= 200 and y < 400: # Quarto
-            screen.blit(personagem_atual, (70, 240)) # 1/2
-            
-        elif x >= 200 and x < 400 and y >= 200 and y < 400: # Quinto
-            screen.blit(personagem_atual, (270, 240)) # 2/2
-
-        elif x >= 400 and y >= 200 and y < 400: # Sexto
-            screen.blit(personagem_atual, (470, 240)) # 3/2
-
-        elif x < 200 and y >= 400: # Sétimo
-            screen.blit(personagem_atual, (70, 440)) # 1/3
-
-        elif x >= 200 and x < 400 and y >= 400: # Oitavo
-            screen.blit(personagem_atual, (270, 440)) # 2/3
-
-        elif x >= 400 and y >= 400: # Nono
-            screen.blit(personagem_atual, (470, 440)) # 3/3
-            screen.blit(mensagem1, (100, 50)) # 3/3
-            screen.blit(mensagem2, (100, 250)) # 3/3
-
-
+       
             
 
         
