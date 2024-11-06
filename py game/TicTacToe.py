@@ -1,4 +1,4 @@
-#Título: Jogo da Velha - Lógica em Sala de Aula 
+#Título: Jogo da Velha - Lógica em Sala de Aula
 
 
 import pygame #importa a biblioteca pygame para o script
@@ -13,13 +13,14 @@ running = True #variável de controle de status do jogo
 cor_fundo = 1 #azul / contador
 rodadas = 0
 tabuleiro_desenhado = False
-x = 0
+x = 0 
 y = 0
 
 fonte_mensagem = pygame.font.SysFont("Comic Sans MS", 150)
 
 mensagem1 = fonte_mensagem.render("Game ", True, "Yellow")
 mensagem2 = fonte_mensagem.render("Over! ", True, "Yellow")
+velha = fonte_mensagem.render("Velha! ", True, "Yellow")
 
 
 
@@ -48,8 +49,8 @@ q9 = ''
 def desenha_tabuleiro(espessura, cor):
     # valor 7 = espesu
      # Desenho do tabuleiro
-        #                                  Origem    Destino
-        #                                 ( x, y ) ( x ,  y )
+        #                             Origem    Destino
+        #                            ( x, y )  ( x ,  y )
         pygame.draw.line(screen, cor,(200, 0), (200, 600), espessura) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
         pygame.draw.line(screen, cor,(400, 0), (400, 600), espessura) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
        
@@ -109,6 +110,61 @@ def faz_jogada():
     return status
 
 
+def check_vencedor():
+    status = False
+    if q1 == q2 == q3 != '': 
+        print("Vencedor1", personagem_atual) # Linhas
+        status = True
+        pygame.draw.line(screen, "Red",(0, 100), (600, 100), 7)
+
+    elif q4 == q5 == q6 != '':
+        print("Vencedor2", personagem_atual) # Linhas
+        status = True
+        pygame.draw.line(screen, "Red",(0, 300), (600, 300), 7)
+
+    elif q7 == q8 == q9 != '':
+        print("Vencedor3", personagem_atual) # Linhas
+        status = True
+        pygame.draw.line(screen, "Red",(0, 500), (600, 500), 7)
+
+    elif q1 == q4 == q7 != '':
+        print("Vencedor4", personagem_atual) # Colunas
+        status = True
+        pygame.draw.line(screen, "Red",(100, 0), (100, 600), 7) 
+
+    elif q2 == q5 == q8 != '':
+        print("Vencedor5", personagem_atual) # Colunas
+        status = True
+        pygame.draw.line(screen, "Red",(300, 0), (300, 600), 7) 
+
+    elif q3 == q6 == q9 != '':
+        print("Vencedor6", personagem_atual) # Colunas
+        status = True
+        pygame.draw.line(screen, "Red",(500, 0), (500, 600), 7) 
+
+    elif q1 == q5 == q9 != '':
+        print("Vencedor7", personagem_atual) # Diagonal
+        status = True
+        pygame.draw.line(screen, "Red", (1, 1), (900, 880), 7)
+
+    elif q3 == q5 == q7 != '':
+        print("Vencedor8", personagem_atual) # Diagonal
+        status = True
+        pygame.draw.line(screen, "Red", (10, 600), (600, 10), 7)
+
+    # else:
+    #     print("VELHA", personagem_atual) # Diagonal
+    #     screen.blit(velha, (80, 150)) # empate
+
+
+
+
+
+    
+    return status
+
+
+
 #Loop do jogo
 while running: # Enquanto a variável "running" for verdadeira, o jogo continua
 
@@ -124,8 +180,8 @@ while running: # Enquanto a variável "running" for verdadeira, o jogo continua
             #print("Clicou!") # Aparecerá "clicou!" no terminal
             click_pos = pygame.mouse.get_pos() # traz a posição do mouse no evento click
 
-            print("Eixo X: ", click_pos[0])
-            print("Eixo Y: ", click_pos[1])
+           # print("Eixo X: ", click_pos[0])
+            # print("Eixo Y: ", click_pos[1])
             x = click_pos[0]
             y = click_pos[1]
 
@@ -134,7 +190,9 @@ while running: # Enquanto a variável "running" for verdadeira, o jogo continua
                 rodadas = 0
                 x = 0
                 y = 0
+                personagem_atual = personagem_x
                 tabuleiro_desenhado = False 
+                break
 
             if (faz_jogada()):
                 rodadas = rodadas + 1 #contador
@@ -143,6 +201,10 @@ while running: # Enquanto a variável "running" for verdadeira, o jogo continua
                     personagem_atual = personagem_o
                 else:
                     personagem_atual = personagem_x
+
+                if (check_vencedor()): # impede o jogo de continuar depois de ter ganhado
+                    rodadas = 9 
+                
 
 
 
