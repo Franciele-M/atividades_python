@@ -13,13 +13,14 @@ running = True #variável de controle de status do jogo
 cor_fundo = 1 #azul / contador
 rodadas = 0
 tabuleiro_desenhado = False
-x = 0
+x = 0 
 y = 0
 
 fonte_mensagem = pygame.font.SysFont("Comic Sans MS", 150)
 
 mensagem1 = fonte_mensagem.render("Game ", True, "Yellow")
 mensagem2 = fonte_mensagem.render("Over! ", True, "Yellow")
+velha = fonte_mensagem.render("Velha! ", True, "Yellow")
 
 
 
@@ -48,8 +49,8 @@ q9 = ''
 def desenha_tabuleiro(espessura, cor):
     # valor 7 = espesu
      # Desenho do tabuleiro
-        #                                  Origem    Destino
-        #                                 ( x, y ) ( x ,  y )
+        #                             Origem    Destino
+        #                            ( x, y )  ( x ,  y )
         pygame.draw.line(screen, cor,(200, 0), (200, 600), espessura) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
         pygame.draw.line(screen, cor,(400, 0), (400, 600), espessura) # desenha uma linha vertical na tela (variável: tela, cor, tamanho, tamanho, expessura)
        
@@ -109,6 +110,58 @@ def faz_jogada():
     return status
 
 
+def check_vencedor():
+    status = False
+    if q1 == q2 == q3 != '': 
+        print("Vencedor1", personagem_atual) # Linhas
+        status = True
+        pygame.draw.line(screen, "Red",(0, 100), (600, 100), 7)
+
+    elif q4 == q5 == q6 != '':
+        print("Vencedor2", personagem_atual) # Linhas
+        status = True
+        pygame.draw.line(screen, "Red",(0, 300), (600, 300), 7)
+
+    elif q7 == q8 == q9 != '':
+        print("Vencedor3", personagem_atual) # Linhas
+        status = True
+        pygame.draw.line(screen, "Red",(0, 500), (600, 500), 7)
+
+    elif q1 == q4 == q7 != '':
+        print("Vencedor4", personagem_atual) # Colunas
+        status = True
+        pygame.draw.line(screen, "Red",(100, 0), (100, 600), 7) 
+
+    elif q2 == q5 == q8 != '':
+        print("Vencedor5", personagem_atual) # Colunas
+        status = True
+        pygame.draw.line(screen, "Red",(300, 0), (300, 600), 7) 
+
+    elif q3 == q6 == q9 != '':
+        print("Vencedor6", personagem_atual) # Colunas
+        status = True
+        pygame.draw.line(screen, "Red",(500, 0), (500, 600), 7) 
+
+    elif q1 == q5 == q9 != '':
+        print("Vencedor7", personagem_atual) # Diagonal
+        status = True
+        pygame.draw.line(screen, "Red", (1, 1), (900, 880), 7)
+
+    elif q3 == q5 == q7 != '':
+        print("Vencedor8", personagem_atual) # Diagonal
+        status = True
+        pygame.draw.line(screen, "Red", (10, 600), (600, 10), 7)
+
+    if not status:
+        # Se todos os quadrantes estiverem preenchidos e ninguém venceu, é "VELHA"
+        if q1 != '' and q2 != '' and q3 != '' and q4 != '' and q5 != '' and q6 != '' and q7 != '' and q8 != '' and q9 != '':
+            print("VELHA", personagem_atual)
+            screen.blit(velha, (80, 150))  
+    
+    return status
+
+
+
 #Loop do jogo
 while running: # Enquanto a variável "running" for verdadeira, o jogo continua
 
@@ -124,17 +177,21 @@ while running: # Enquanto a variável "running" for verdadeira, o jogo continua
             #print("Clicou!") # Aparecerá "clicou!" no terminal
             click_pos = pygame.mouse.get_pos() # traz a posição do mouse no evento click
 
-            print("Eixo X: ", click_pos[0])
-            print("Eixo Y: ", click_pos[1])
-            x = click_pos[0]
-            y = click_pos[1]
+           # print("Eixo X: ", click_pos[0]) #printa a posição do eixo X
+            # print("Eixo Y: ", click_pos[1]) #printa a posição do eixo Y
+            x = click_pos[0] # Quando houver click na tela, a posição do Eixo X será capturada
+            y = click_pos[1] # Quando houver click na tela, a posição do Eixo Y será capturada
 
-            if rodadas >= 9:
-                screen.fill("Black")
-                rodadas = 0
+
+            if rodadas >= 9: #se a rodada for maior que 9
+                screen.fill("Black") #a tela ficará vazia
+                #zera os comandos
+                rodadas = 0 
                 x = 0
                 y = 0
+                personagem_atual = personagem_x # ao reiniciar o jogo, começará com o jogador X
                 tabuleiro_desenhado = False 
+                break # Irá parar quando o jogo quando atual, para começar uma nova rodada
 
             if (faz_jogada()):
                 rodadas = rodadas + 1 #contador
@@ -144,18 +201,16 @@ while running: # Enquanto a variável "running" for verdadeira, o jogo continua
                 else:
                     personagem_atual = personagem_x
 
-
+                if (check_vencedor()): # impede o jogo de continuar depois de ter ganhado
+                    rodadas = 9 # rodadas = 9 para haver um break, quando o personagem ganhar e não continuar o jogo
+                
 
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-       
-        
-    
-       
 
 
-
+    #Desenha o tabuleiro e zera os quadrantes
     if tabuleiro_desenhado == False:
         #Função que desenha tabuleiro (espessura, cor) (aqui é o valor da variável: tamanho, cor, etc.)
         desenha_tabuleiro(10, "green")
@@ -168,17 +223,7 @@ while running: # Enquanto a variável "running" for verdadeira, o jogo continua
         q7 = ''
         q8 = ''
         q9 = ''
-        tabuleiro_desenhado = True #DESCOMENTA DEPOIS
-       
-
-        
-
-
-
-#---------------GAME OVER!!!------------------------------------------
-
-       
-
+        tabuleiro_desenhado = True 
        
             
     # display para atualizar a página
